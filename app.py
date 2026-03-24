@@ -57,7 +57,11 @@ def get_station_components():
 @st.cache_data
 def process_trace(file_path):
     """SAC 파일을 읽고 노이즈 제거를 위한 필터링을 수행합니다."""
+    eventtime = obspy.UTCDateTime("2016-09-12T11:33:00")
+    starttime = eventtime - 50
+    endtime = eventtime + 500
     tr = obspy.read(file_path)[0]
+    tr.trim(starttime, endtime)
     tr.detrend('demean')
     tr.taper(0.05)
     tr.filter('bandpass', freqmin=1.0, freqmax=10.0)
