@@ -209,8 +209,8 @@ elif app_mode == "2. 위치 결정 완료":
     first_sta = list(st.session_state.picks.keys())[0]
     m = folium.Map(location=[station_db.loc[first_sta, 'latitude'], station_db.loc[first_sta, 'longitude']], zoom_start=8, tiles='CartoDB positron')
 
-    if heatmap_data:
-        HeatMap(heatmap_data, radius=20, blur=15, min_opacity=0.2, gradient={0.4: 'blue', 0.65: 'lime', 1: 'red'}).add_to(m)
+    # if heatmap_data:
+    #     HeatMap(heatmap_data, radius=20, blur=15, min_opacity=0.2, gradient={0.4: 'blue', 0.65: 'lime', 1: 'red'}).add_to(m)
 
     folium.Marker([calc_lat, calc_lon], popup=f"계산된 진앙", icon=folium.Icon(color="blue", icon="star")).add_to(m)
 
