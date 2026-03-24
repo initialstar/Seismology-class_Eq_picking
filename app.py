@@ -116,13 +116,25 @@ if not traces:
     st.stop()
 
 # 피킹 시간 입력 슬라이더
-st.markdown("### ⏱️ 도달 시간 입력")
+# st.markdown("### ⏱️ 도달 시간 입력")
+# col1, col2 = st.columns(2)
+# with col1:
+#     p_pick = st.slider("🔴 P파 도착 시간 (Z성분 위주)", 0.0, max_time, 0.0, step=0.01)
+# with col2:
+#     s_pick = st.slider("🔵 S파 도착 시간 (N/E성분 위주)", 0.0, max_time, 0.0, step=0.01)
+# ==========================================
+# (수정) 피킹 시간 입력 - 직접 입력 및 미세조정 방식
+# ==========================================
+st.markdown("### ⏱️ 도달 시간 입력 (직접 입력 또는 +/- 버튼 사용)")
 col1, col2 = st.columns(2)
 with col1:
-    p_pick = st.slider("🔴 P파 도착 시간 (Z성분 위주)", 0.0, max_time, 0.0, step=0.01)
+    # min_value=0.0, max_value=max_time: 파형의 시작과 끝 시간 사이만 입력 가능
+    # step=0.01: 옆의 +/- 버튼을 누를 때마다 0.01초씩 이동
+    # format="%.2f": 소수점 둘째 자리까지 깔끔하게 표시
+    p_pick = st.number_input("🔴 P파 도착 시간 (Z성분 위주)", min_value=0.0, max_value=max_time, value=0.0, step=0.01, format="%.2f")
 with col2:
-    s_pick = st.slider("🔵 S파 도착 시간 (N/E성분 위주)", 0.0, max_time, 0.0, step=0.01)
-
+    s_pick = st.number_input("🔵 S파 도착 시간 (N/E성분 위주)", min_value=0.0, max_value=max_time, value=0.0, step=0.01, format="%.2f")
+    
 # ==========================================
 # 5. Plotly 3단 그래프 렌더링 (동기화 및 마우스 조작 최적화)
 # ==========================================
@@ -158,6 +170,7 @@ fig.update_layout(
     dragmode="zoom",       # 마우스 드래그 시 확대 기능 활성화
     hovermode="x unified", # 마우스 오버 시 3성분 시간/진폭 동시 확인
     showlegend=False
+    uirevision="constant"
 )
 
 # ⭐️ 핵심: Y축(진폭) 줌 고정. 마우스 드래그 시 X축(시간)만 확대되도록 설정
