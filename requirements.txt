@@ -1,4 +1,6 @@
 streamlit
 obspy
 plotly
-numpy
+pandas
+folium
+streamlit-folium
