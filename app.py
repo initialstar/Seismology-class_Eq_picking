@@ -144,7 +144,8 @@ if app_mode == "1. 3성분 파형 피킹":
 
     if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
         if s_pick > p_pick:
-            dist = (s_pick - p_pick) * 7.5 # k-factor
+            # dist = (s_pick - p_pick) * 7.5 # k-factor
+            dist = (s_pick - p_pick) * 8.4 # Korea
             st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
             st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
         else: st.error("S파 도착 시간이 P파보다 빠를 수 없습니다.")
