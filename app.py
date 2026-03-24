@@ -13,7 +13,7 @@ from folium.plugins import HeatMap
 # ==========================================
 # 0. 페이지 및 세션 상태 초기화
 # ==========================================
-st.set_page_config(layout="wide", page_title="실전! 진앙 결정 실습", initial_sidebar_state="expanded")
+st.set_page_config(layout="wide", page_title="지진 분석 및 위치결정 실습", initial_sidebar_state="expanded")
 
 if 'picks' not in st.session_state:
     st.session_state.picks = {}
