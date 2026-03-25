@@ -151,7 +151,7 @@ if app_mode == "1. 파형":
         else: st.error("S파 도착 시간이 P파보다 빠를 수 없습니다.")
 
     # ⭐️ 3성분 동기화 그래프 (make_subplots 복구)
-    fig = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.05,
+    fig = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.15,    #0.05 -> 0.15
                         subplot_titles=("<b>Z 성분</b> (상하)", "<b>N 성분</b> (남북)", "<b>E 성분</b> (동서)"))
 
     colors = {'Z': 'black', 'N': '#3366cc', 'E': '#dc3912'}
@@ -159,7 +159,8 @@ if app_mode == "1. 파형":
     for comp in ['Z', 'N', 'E']:
         if comp in traces:
             tr = traces[comp]
-            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
+            # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
+            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), hovertemplate=f"[{comp}성분] 시간 : %{{x:.2f}}초", row=row_idx, col=1)
         row_idx += 1
 
     # 피킹 수직선 (세 그래프 관통)
@@ -168,12 +169,18 @@ if app_mode == "1. 파형":
 
     # ⭐️ 줌 고정 및 Y축 고정 마법
     fig.update_layout(
-        height=650, 
+        height=500,    # 650 -> 500
         margin=dict(l=10, r=10, t=40, b=30), 
         dragmode="zoom", 
         hovermode="x unified", 
         showlegend=False,
         uirevision="constant" # 줌 풀림 방지
+        hoverlabel=dict(
+            bgcolor="rgba(255, 255, 255, 0.8)", # 배경을 80% 흰색(살짝 투명하게)
+            font_size=14,                       # 글자 크기
+            font_family="Arial",
+            bordercolor="black"                 # 테두리 색상
+        )
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
