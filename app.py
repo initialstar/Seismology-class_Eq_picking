@@ -210,13 +210,8 @@ if app_mode == "1. 파형":
         title_text="시간 (초)", 
         tickformat=".2f", 
         ticksuffix="초",
-        showspikes=True,       # 마우스 추적 십자선 켜기
-        spikemode="across",    # 세로로 전체 관통하기
         spikesnap="cursor",    # 파형 데이터가 아닌 마우스 위치만 정확히 따라가기
         showspikelabels=True,  # ⭐️ 맨 아래쪽 x축에만 시간 박스 띄우기
-        spikecolor="black",    # 십자선 색상
-        spikethickness=1,      # 십자선 두께
-        spikedash="dot"        # 십자선을 점선으로 표시
     )
     
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
