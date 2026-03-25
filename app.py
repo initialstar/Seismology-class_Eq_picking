@@ -139,8 +139,8 @@ if app_mode == "1. 파형":
 
     st.markdown("### ⏱️ 시간 입력 (+/- 버튼으로 미세조정)")
     col1, col2 = st.columns(2)
-    with col1: p_pick = st.number_input("🔴 P파 (Z성분 위주)", min_value=0.0, max_value=max_time, value=saved_p, step=0.01, format="%.2f")
-    with col2: s_pick = st.number_input("🔵 S파 (N/E성분 위주)", min_value=0.0, max_value=max_time, value=saved_s, step=0.01, format="%.2f")
+    with col1: p_pick = st.number_input("P파 (Z성분 위주)", min_value=0.0, max_value=max_time, value=saved_p, step=0.01, format="%.2f")
+    with col2: s_pick = st.number_input("S파 (N/E성분 위주)", min_value=0.0, max_value=max_time, value=saved_s, step=0.01, format="%.2f")
 
     # if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
     #     if s_pick > p_pick:
@@ -172,7 +172,7 @@ if app_mode == "1. 파형":
             tr = traces[comp]
             # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
             fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), 
-                                     hovertemplate="<span style='color:red; font-weight:bold; font-size:16px;'>%{x:.2f}</span><extra></extra>"), row=row_idx, col=1)
+                                     hovertemplate="<span style='color:red; font-weight:bold; font-size:16px"), row=row_idx, col=1)
         row_idx += 1
 
     # # 피킹 수직선 (세 그래프 관통)
