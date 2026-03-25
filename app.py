@@ -204,15 +204,8 @@ if app_mode == "1. 파형":
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     # fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
-    # fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
+    fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
 
-    fig.update_xaxes(
-        title_text="시간 (초)", 
-        tickformat=".2f", 
-        ticksuffix="초",
-        spikesnap="cursor",    # 파형 데이터가 아닌 마우스 위치만 정확히 따라가기
-        showspikelabels=True,  # ⭐️ 맨 아래쪽 x축에만 시간 박스 띄우기
-    )
     
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
 
