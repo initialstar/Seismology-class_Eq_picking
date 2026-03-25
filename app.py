@@ -111,7 +111,7 @@ sac_inventory = get_station_components()
 # ==========================================
 # 2. 사이드바 네비게이션
 # ==========================================
-st.sidebar.title("🌋 실습")
+st.sidebar.title("실습")
 app_mode = st.sidebar.radio("바로가기", ["1. 파형", "2. 위치 결정"])
 st.sidebar.markdown("---")
 
@@ -120,9 +120,9 @@ st.sidebar.markdown("---")
 # ==============================================================================
 if app_mode == "1. 파형":
     if not sac_inventory: st.stop()
-    st.sidebar.subheader("📡 관측소")
+    st.sidebar.subheader("관측소")
     selected_sta = st.sidebar.radio("선택", sorted(list(sac_inventory.keys())))
-    st.title(f"🔍 {selected_sta} ")
+    st.title(f"{selected_sta} ")
     
     saved_p = st.session_state.picks.get(selected_sta, {}).get('p', None)
     saved_s = st.session_state.picks.get(selected_sta, {}).get('s', None)
