@@ -171,7 +171,8 @@ if app_mode == "1. 파형":
         if comp in traces:
             tr = traces[comp]
             # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
-            hover_template_clean = "%{x:.2f}초<extra></extra>"
+            # hover_template_clean = "%{x:.2f}초<extra></extra>"
+            hover_template_clean = "none"
             fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=hover_template_clean), row=row_idx, col=1)
         row_idx += 1
 
@@ -192,12 +193,13 @@ if app_mode == "1. 파형":
         hovermode="x", 
         showlegend=False,
         uirevision="constant", # 줌 풀림 방지
-        hoverlabel=dict(
-            bgcolor="rgba(255, 255, 255, 0.8)", # 배경을 80% 흰색(살짝 투명하게)
-            font_size=14,                       # 글자 크기
-            font_family="Arial",
-            bordercolor="black"                 # 테두리 색상
-        )
+        
+        # hoverlabel=dict(
+        #     bgcolor="rgba(255, 255, 255, 0.8)", # 배경을 80% 흰색(살짝 투명하게)
+        #     font_size=14,                       # 글자 크기
+        #     font_family="Arial",
+        #     bordercolor="black"                 # 테두리 색상
+        # )
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     # fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
