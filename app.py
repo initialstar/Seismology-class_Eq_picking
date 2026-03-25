@@ -170,10 +170,9 @@ if app_mode == "1. 파형":
     for comp in ['Z', 'N', 'E']:
         if comp in traces:
             tr = traces[comp]
-            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)"), row=row_idx, col=1)
+            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=""), row=row_idx, col=1)
             # hover_template_clean = "%{x:.2f}초<extra></extra>
-            hover_template_clean = "%{x:.2f}
-            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=hover_template_clean), row=row_idx, col=1)
+            # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=hover_template_clean), row=row_idx, col=1)
         row_idx += 1
 
     # # 피킹 수직선 (세 그래프 관통)
