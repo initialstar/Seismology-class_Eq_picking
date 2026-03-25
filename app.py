@@ -122,7 +122,7 @@ if app_mode == "1. 파형":
     if not sac_inventory: st.stop()
     st.sidebar.subheader("📡 관측소")
     selected_sta = st.sidebar.radio("선택", sorted(list(sac_inventory.keys())))
-    st.title(f"🔍 {selected_sta} 3성분 피킹 및 저장")
+    st.title(f"🔍 {selected_sta} ")
     
     saved_p = st.session_state.picks.get(selected_sta, {}).get('p', 0.0)
     saved_s = st.session_state.picks.get(selected_sta, {}).get('s', 0.0)
