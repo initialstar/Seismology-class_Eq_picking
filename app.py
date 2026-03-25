@@ -172,8 +172,8 @@ if app_mode == "1. 파형":
             tr = traces[comp]
             # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
             # hover_template_clean = "%{x:.2f}초<extra></extra>"
-            hover_template_clean = "none"
-            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=hover_template_clean), row=row_idx, col=1)
+            # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=hover_template_clean), row=row_idx, col=1)
+            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hoverinfo="none"), row=row_idx, col=1)
         row_idx += 1
 
     # # 피킹 수직선 (세 그래프 관통)
@@ -203,8 +203,9 @@ if app_mode == "1. 파형":
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     # fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
-    fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
-
+    # fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
+    fig.update_xaxes(title_text="시간 (초)", tickformat=".2f", ticksuffix="초")
+    
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
 
 # ==============================================================================
