@@ -203,8 +203,8 @@ if app_mode == "1. 파형":
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     # fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
-    # fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
-    fig.update_xaxes(title_text="시간 (초)", tickformat=".2f", ticksuffix="초")
+    fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
+    # fig.update_xaxes(title_text="시간 (초)", tickformat=".2f", ticksuffix="초")
     
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
 
