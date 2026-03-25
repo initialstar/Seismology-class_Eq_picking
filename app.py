@@ -123,7 +123,7 @@ if app_mode == "1. 파형":
     st.sidebar.subheader("관측소")
     selected_sta = st.sidebar.radio("선택", sorted(list(sac_inventory.keys())))
     st.title(f"{selected_sta} ")
-    
+    st.info("💡 **Z성분**: P파 | **N/E성분**: S파")
     saved_p = st.session_state.picks.get(selected_sta, {}).get('p', None)
     saved_s = st.session_state.picks.get(selected_sta, {}).get('s', None)
 
@@ -172,7 +172,7 @@ if app_mode == "1. 파형":
             tr = traces[comp]
             # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
             fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), 
-                                     hovertemplate="<span style='color:red; font-weight:bold; font-size:16px"), row=row_idx, col=1)
+                                     hovertemplate="<span style='color:red; font-weight:bold; font-size:16px;'>%{x:.2f}</span><extra></extra>"), row=row_idx, col=1)
         row_idx += 1
 
     # # 피킹 수직선 (세 그래프 관통)
@@ -188,8 +188,8 @@ if app_mode == "1. 파형":
         height=500,    # 650 -> 500
         margin=dict(l=10, r=10, t=40, b=30), 
         dragmode="zoom", 
-        # hovermode="x unified", 
-        hovermode="x", 
+        hovermode="x unified", 
+        # hovermode="x", 
         showlegend=False,
         uirevision="constant", # 줌 풀림 방지
         
