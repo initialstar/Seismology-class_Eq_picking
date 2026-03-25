@@ -153,7 +153,7 @@ if app_mode == "1. 파형":
     if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
         if p_pick is not None and s_pick is not None: # 둘 다 값이 있을 때만 계산
             if s_pick > p_pick:
-                dist = (s_pick - p_pick) * 7.5 # k-factor
+                dist = (s_pick - p_pick) * 8.4 
                 st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
                 st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
             else: 
