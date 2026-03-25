@@ -189,24 +189,21 @@ if app_mode == "1. 파형":
         margin=dict(l=10, r=10, t=40, b=30), 
         dragmode="zoom", 
         # hovermode="x unified", 
-        # hovermode="x", 
-        hovermode="closest",
-        hoverdistance=0,
+        hovermode="x", 
         showlegend=False,
         uirevision="constant", # 줌 풀림 방지
         
-        # hoverlabel=dict(
-        #     bgcolor="rgba(255, 255, 255, 0.8)", # 배경을 80% 흰색(살짝 투명하게)
-        #     font_size=14,                       # 글자 크기
-        #     font_family="Arial",
-        #     bordercolor="black"                 # 테두리 색상
-        # )
+        hoverlabel=dict(
+            bgcolor="rgba(255, 255, 255, 0.8)", # 배경을 80% 흰색(살짝 투명하게)
+            font_size=14,                       # 글자 크기
+            font_family="Arial",
+            bordercolor="black"                 # 테두리 색상
+        )
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     # fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
     fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
 
-    
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
 
 # ==============================================================================
