@@ -124,8 +124,8 @@ if app_mode == "1. 파형":
     selected_sta = st.sidebar.radio("선택", sorted(list(sac_inventory.keys())))
     st.title(f"🔍 {selected_sta} ")
     
-    saved_p = st.session_state.picks.get(selected_sta, {}).get('p', 0.0)
-    saved_s = st.session_state.picks.get(selected_sta, {}).get('s', 0.0)
+    saved_p = st.session_state.picks.get(selected_sta, {}).get('p', None)
+    saved_s = st.session_state.picks.get(selected_sta, {}).get('s', None)
 
     # 3성분 데이터 모두 로드
     comps = sac_inventory[selected_sta]
@@ -142,13 +142,24 @@ if app_mode == "1. 파형":
     with col1: p_pick = st.number_input("🔴 P파 (Z성분 위주)", min_value=0.0, max_value=max_time, value=saved_p, step=0.01, format="%.2f")
     with col2: s_pick = st.number_input("🔵 S파 (N/E성분 위주)", min_value=0.0, max_value=max_time, value=saved_s, step=0.01, format="%.2f")
 
+    # if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
+    #     if s_pick > p_pick:
+    #         # dist = (s_pick - p_pick) * 7.5 # k-factor
+    #         dist = (s_pick - p_pick) * 8.4 # Korea
+    #         st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
+    #         st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
+    #     else: st.error("S파 도착 시간이 P파보다 빠를 수 없습니다.")
+            
     if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
-        if s_pick > p_pick:
-            # dist = (s_pick - p_pick) * 7.5 # k-factor
-            dist = (s_pick - p_pick) * 8.4 # Korea
-            st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
-            st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
-        else: st.error("S파 도착 시간이 P파보다 빠를 수 없습니다.")
+        if p_pick is not None and s_pick is not None: # 둘 다 값이 있을 때만 계산
+            if s_pick > p_pick:
+                dist = (s_pick - p_pick) * 7.5 # k-factor
+                st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
+                st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
+            else: 
+                st.error("⚠️ S파 도착 시간이 P파보다 빠를 수 없습니다.")
+        else:
+            st.error("⚠️ P파와 S파 도착 시간을 모두 입력해 주세요.")
 
     # ⭐️ 3성분 동기화 그래프 (make_subplots 복구)
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.15,    #0.05 -> 0.15
@@ -163,9 +174,13 @@ if app_mode == "1. 파형":
             fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), hovertemplate=f"[{comp}성분] 시간 : %{{x:.2f}}초", row=row_idx, col=1)
         row_idx += 1
 
+    # # 피킹 수직선 (세 그래프 관통)
+    # if p_pick > 0: fig.add_vline(x=p_pick, line_width=2, line_color="red", row="all", col=1)
+    # if s_pick > 0: fig.add_vline(x=s_pick, line_width=2, line_color="blue", row="all", col=1)
+    
     # 피킹 수직선 (세 그래프 관통)
-    if p_pick > 0: fig.add_vline(x=p_pick, line_width=2, line_color="red", row="all", col=1)
-    if s_pick > 0: fig.add_vline(x=s_pick, line_width=2, line_color="blue", row="all", col=1)
+    if p_pick is not None: fig.add_vline(x=p_pick, line_width=2, line_color="red", row="all", col=1)
+    if s_pick is not None: fig.add_vline(x=s_pick, line_width=2, line_color="blue", row="all", col=1)
 
     # ⭐️ 줌 고정 및 Y축 고정 마법
     fig.update_layout(
@@ -174,7 +189,7 @@ if app_mode == "1. 파형":
         dragmode="zoom", 
         hovermode="x unified", 
         showlegend=False,
-        uirevision="constant" # 줌 풀림 방지
+        uirevision="constant", # 줌 풀림 방지
         hoverlabel=dict(
             bgcolor="rgba(255, 255, 255, 0.8)", # 배경을 80% 흰색(살짝 투명하게)
             font_size=14,                       # 글자 크기
