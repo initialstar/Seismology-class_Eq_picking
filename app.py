@@ -170,10 +170,9 @@ if app_mode == "1. 파형":
     for comp in ['Z', 'N', 'E']:
         if comp in traces:
             tr = traces[comp]
-            # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
+            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
             # hover_template_clean = "%{x:.2f}초<extra></extra>"
             # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=hover_template_clean), row=row_idx, col=1)
-            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hoverinfo="none"), row=row_idx, col=1)
         row_idx += 1
 
     # # 피킹 수직선 (세 그래프 관통)
@@ -190,7 +189,9 @@ if app_mode == "1. 파형":
         margin=dict(l=10, r=10, t=40, b=30), 
         dragmode="zoom", 
         # hovermode="x unified", 
-        hovermode="x", 
+        # hovermode="x", 
+        hovermode="closest",
+        hoverdistance=0,
         showlegend=False,
         uirevision="constant", # 줌 풀림 방지
         
@@ -203,8 +204,20 @@ if app_mode == "1. 파형":
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     # fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
-    fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
-    # fig.update_xaxes(title_text="시간 (초)", tickformat=".2f", ticksuffix="초")
+    # fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
+
+    fig.update_xaxes(
+        title_text="시간 (초)", 
+        tickformat=".2f", 
+        ticksuffix="초",
+        showspikes=True,       # 마우스 추적 십자선 켜기
+        spikemode="across",    # 세로로 전체 관통하기
+        spikesnap="cursor",    # 파형 데이터가 아닌 마우스 위치만 정확히 따라가기
+        showspikelabels=True,  # ⭐️ 맨 아래쪽 x축에만 시간 박스 띄우기
+        spikecolor="black",    # 십자선 색상
+        spikethickness=1,      # 십자선 두께
+        spikedash="dot"        # 십자선을 점선으로 표시
+    )
     
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
 
