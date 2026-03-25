@@ -171,7 +171,7 @@ if app_mode == "1. 파형":
         if comp in traces:
             tr = traces[comp]
             # fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), row=row_idx, col=1)
-            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1)), hovertemplate=f"[{comp}성분] 시간 : %{{x:.2f}}초", row=row_idx, col=1)
+            fig.add_trace(go.Scatter(x=tr.times(), y=tr.data, mode='lines', line=dict(color=colors[comp], width=1), hovertemplate=f"[{comp}성분] 시간 : %{{x:.2f}}초"), row=row_idx, col=1)
         row_idx += 1
 
     # # 피킹 수직선 (세 그래프 관통)
