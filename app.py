@@ -210,49 +210,49 @@ if app_mode == "1. Waveform":
 # ==============================================================================
 # [모드 2] 진앙 위치 결정 화면
 # ==============================================================================
-elif app_mode == "2. 위치 결정":
-    st.title("📍 위치 결정 결과 확인")
+elif app_mode == "2. Location":
+    st.title("📍 Location result")
     
     if len(st.session_state.picks) < 3:
-        st.warning("⚠️ 최소 3개 이상 관측소의 피킹 데이터가 필요합니다.")
+        st.warning("⚠️ Location requires at least 3 stations")
         st.stop()
 
-    with st.spinner("최적의 진앙 위치를 계산 중입니다..."):
+    with st.spinner("Computing an epicenter..."):
         best_sol, heatmap_data = calculate_epicenter_grid(st.session_state.picks, station_db)
     
     if best_sol is None:
-        st.error("위치 계산에 실패했습니다.")
+        st.error("Location failed")
         st.stop()
         
     calc_lat, calc_lon, calc_rmse = best_sol
 
-    st.subheader("📊 계산 결과 리포트")
+    st.subheader("📊 Computing result")
     c1, c2, c3 = st.columns(3)
-    c1.metric("💡 계산된 위도", f"{calc_lat:.4f}°N")
-    c2.metric("💡 계산된 경도", f"{calc_lon:.4f}°E")
-    c3.metric("📉 평균 위치 오차 (RMSE)", f"{calc_rmse:.1f} km")
+    c1.metric("💡 Estimated latitude", f"{calc_lat:.4f}°N")
+    c2.metric("💡 Estimated longitude", f"{calc_lon:.4f}°E")
+    c3.metric("📉 Error (RMSE)", f"{calc_rmse:.1f} km")
     st.markdown("---")
 
-    st.subheader("🗺️ 진앙 분석 지도 (확률 분포 및 오차 비교)")
+    st.subheader("🗺️ Epicenter map (Comparing misfit)")
     first_sta = list(st.session_state.picks.keys())[0]
     m = folium.Map(location=[station_db.loc[first_sta, 'latitude'], station_db.loc[first_sta, 'longitude']], zoom_start=8, tiles='CartoDB positron')
 
     # if heatmap_data:
     #     HeatMap(heatmap_data, radius=20, blur=15, min_opacity=0.2, gradient={0.4: 'blue', 0.65: 'lime', 1: 'red'}).add_to(m)
 
-    folium.Marker([calc_lat, calc_lon], popup=f"계산된 진앙", icon=folium.Icon(color="blue", icon="star")).add_to(m)
+    folium.Marker([calc_lat, calc_lon], popup=f"Estimated epicenter", icon=folium.Icon(color="blue", icon="star")).add_to(m)
 
     for sta, data in st.session_state.picks.items():
         lat, lon = station_db.loc[sta, 'latitude'], station_db.loc[sta, 'longitude']
         folium.CircleMarker([lat, lon], radius=3, color="black", fill=True).add_to(m)
         folium.Circle(location=[lat, lon], radius=data['dist'] * 1000, color="#3366cc", weight=1, fill=False, opacity=0.3).add_to(m)
 
-    with st.expander("🎯 실제 지진 위치와 비교하기", expanded=True):
+    with st.expander("🎯 Compating with true location", expanded=True):
         col_t1, col_t2 = st.columns(2)
-        true_lat = col_t1.number_input("실제 위도", value=35.77, format="%.4f")
-        true_lon = col_t2.number_input("실제 경도", value=129.18, format="%.4f")
+        true_lat = col_t1.number_input("True latitude", value=35.77, format="%.4f")
+        true_lon = col_t2.number_input("True longitude", value=129.18, format="%.4f")
         true_dist = haversine_km(calc_lat, calc_lon, true_lat, true_lon)
-        st.info(f"📍 계산된 진앙은 실제 위치로부터 약 **{true_dist:.1f} km** 떨어져 있습니다.")
-        folium.Marker([true_lat, true_lon], popup="실제 위치", icon=folium.Icon(color="red", icon="star")).add_to(m)
+        st.info(f"📍 The estimated location is far away **{true_dist:.1f} km** from the true location.")
+        folium.Marker([true_lat, true_lon], popup="True location", icon=folium.Icon(color="red", icon="star")).add_to(m)
 
     st_folium(m, width=1000, height=600)
