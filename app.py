@@ -119,10 +119,10 @@ st.sidebar.markdown("---")
 # ==============================================================================
 # [모드 1] 3성분 파형 피킹 화면
 # ==============================================================================
-if app_mode == "1. 파형":
+if app_mode == "1. Waveform":
     if not sac_inventory: st.stop()
     st.sidebar.subheader("Station")
-    selected_sta = st.sidebar.radio("선택", sorted(list(sac_inventory.keys())))
+    selected_sta = st.sidebar.radio("Select", sorted(list(sac_inventory.keys())))
     st.title(f"{selected_sta} ")
     st.info("💡 **Z**: P-wave | **N/E**: S-wave")
     saved_p = st.session_state.picks.get(selected_sta, {}).get('p', None)
@@ -138,17 +138,17 @@ if app_mode == "1. 파형":
             traces[comp] = tr
             max_time = max(max_time, float(tr.times()[-1]))
 
-    st.markdown("### ⏱️ 시간 입력 (+/- 버튼으로 미세조정)")
+    st.markdown("### ⏱️ Enter time (+/- fine tunning)")
     col1, col2 = st.columns(2)
     with col1: p_pick = st.number_input("P-wave", min_value=0.0, max_value=max_time, value=saved_p, step=0.01, format="%.2f")
     with col2: s_pick = st.number_input("S-wave", min_value=0.0, max_value=max_time, value=saved_s, step=0.01, format="%.2f")
 
-    # if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
+    # if st.button(f"💾 {selected_sta} Save", use_container_width=True):
     #     if s_pick > p_pick:
     #         # dist = (s_pick - p_pick) * 7.5 # k-factor
     #         dist = (s_pick - p_pick) * 8.4 # Korea
     #         st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
-    #         st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
+    #         st.success(f"✅ Saved! (S-P: {s_pick-p_pick:.2f}s, Distance: {dist:.1f}km)")
     #     else: st.error("P-wave arrival time must be faster than S-wave.")
             
     if st.button(f"💾 {selected_sta} Save", use_container_width=True):
@@ -203,7 +203,7 @@ if app_mode == "1. 파형":
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
     fig.update_xaxes(title_text="Time (s)", row=3, col=1)
-    # fig.update_xaxes(title_text="Time (s)", row=3, col=1, tickformat=".2f", ticksuffix="초")
+    # fig.update_xaxes(title_text="Time (s)", row=3, col=1, tickformat=".2f", ticksuffix="s")
 
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
 
