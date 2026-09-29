@@ -13,7 +13,8 @@ from folium.plugins import HeatMap
 # ==========================================
 # 0. 페이지 및 세션 상태 초기화
 # ==========================================
-st.set_page_config(layout="wide", page_title="지진 분석 및 위치결정 실습", initial_sidebar_state="expanded")
+# st.set_page_config(layout="wide", page_title="지진 분석 및 위치결정 실습", initial_sidebar_state="expanded")
+st.set_page_config(layout="wide", page_title="Earthquake location", initial_sidebar_state="expanded")
 
 if 'picks' not in st.session_state:
     st.session_state.picks = {}
@@ -111,8 +112,8 @@ sac_inventory = get_station_components()
 # ==========================================
 # 2. 사이드바 네비게이션
 # ==========================================
-st.sidebar.title("실습")
-app_mode = st.sidebar.radio("바로가기", ["1. 파형", "2. 위치 결정"])
+st.sidebar.title("Practice")
+app_mode = st.sidebar.radio("Menu", ["1. Waveform", "2. Location"])
 st.sidebar.markdown("---")
 
 # ==============================================================================
@@ -120,10 +121,10 @@ st.sidebar.markdown("---")
 # ==============================================================================
 if app_mode == "1. 파형":
     if not sac_inventory: st.stop()
-    st.sidebar.subheader("관측소")
+    st.sidebar.subheader("Station")
     selected_sta = st.sidebar.radio("선택", sorted(list(sac_inventory.keys())))
     st.title(f"{selected_sta} ")
-    st.info("💡 **Z성분**: P파 | **N/E성분**: S파")
+    st.info("💡 **Z**: P-wave | **N/E**: S-wave")
     saved_p = st.session_state.picks.get(selected_sta, {}).get('p', None)
     saved_s = st.session_state.picks.get(selected_sta, {}).get('s', None)
 
@@ -139,8 +140,8 @@ if app_mode == "1. 파형":
 
     st.markdown("### ⏱️ 시간 입력 (+/- 버튼으로 미세조정)")
     col1, col2 = st.columns(2)
-    with col1: p_pick = st.number_input("P파 (Z성분 위주)", min_value=0.0, max_value=max_time, value=saved_p, step=0.01, format="%.2f")
-    with col2: s_pick = st.number_input("S파 (N/E성분 위주)", min_value=0.0, max_value=max_time, value=saved_s, step=0.01, format="%.2f")
+    with col1: p_pick = st.number_input("P-wave", min_value=0.0, max_value=max_time, value=saved_p, step=0.01, format="%.2f")
+    with col2: s_pick = st.number_input("S-wave", min_value=0.0, max_value=max_time, value=saved_s, step=0.01, format="%.2f")
 
     # if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
     #     if s_pick > p_pick:
@@ -148,22 +149,22 @@ if app_mode == "1. 파형":
     #         dist = (s_pick - p_pick) * 8.4 # Korea
     #         st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
     #         st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
-    #     else: st.error("S파 도착 시간이 P파보다 빠를 수 없습니다.")
+    #     else: st.error("P-wave arrival time must be faster than S-wave.")
             
-    if st.button(f"💾 {selected_sta} 결과 저장", use_container_width=True):
+    if st.button(f"💾 {selected_sta} Save", use_container_width=True):
         if p_pick is not None and s_pick is not None: # 둘 다 값이 있을 때만 계산
             if s_pick > p_pick:
                 dist = (s_pick - p_pick) * 8.4 
                 st.session_state.picks[selected_sta] = {'p': p_pick, 's': s_pick, 'dist': dist}
-                st.success(f"✅ 저장됨! (S-P: {s_pick-p_pick:.2f}s, 거리: {dist:.1f}km)")
+                st.success(f"✅ Saved! (S-P: {s_pick-p_pick:.2f}s, Distance: {dist:.1f}km)")
             else: 
-                st.error("⚠️ S파 도착 시간이 P파보다 빠를 수 없습니다.")
+                st.error("⚠️ P-wave arrival time must be faster than S-wave.")
         else:
-            st.error("⚠️ P파와 S파 도착 시간을 모두 입력해 주세요.")
+            st.error("⚠️ Please enter both P- and S-wave arrival times")
 
     # ⭐️ 3성분 동기화 그래프 (make_subplots 복구)
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.15,    #0.05 -> 0.15
-                        subplot_titles=("<b>Z 성분</b> (상하)", "<b>N 성분</b> (남북)", "<b>E 성분</b> (동서)"))
+                        subplot_titles=("<b>Z</b> (Vertical)", "<b>N</b> (North)", "<b>E</b> (East)"))
 
     colors = {'Z': 'black', 'N': '#3366cc', 'E': '#dc3912'}
     row_idx = 1
@@ -201,8 +202,8 @@ if app_mode == "1. 파형":
         )
     )
     fig.update_yaxes(fixedrange=True) # 위아래 확대 방지
-    fig.update_xaxes(title_text="시간 (초)", row=3, col=1)
-    # fig.update_xaxes(title_text="시간 (초)", row=3, col=1, tickformat=".2f", ticksuffix="초")
+    fig.update_xaxes(title_text="Time (s)", row=3, col=1)
+    # fig.update_xaxes(title_text="Time (s)", row=3, col=1, tickformat=".2f", ticksuffix="초")
 
     st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False, 'scrollZoom': True, 'doubleClick': 'reset'})
 
