@@ -235,8 +235,9 @@ elif app_mode == "2. Location":
 
     st.subheader("🗺️ Epicenter map (Comparing misfit)")
     first_sta = list(st.session_state.picks.keys())[0]
-    m = folium.Map(location=[station_db.loc[first_sta, 'latitude'], station_db.loc[first_sta, 'longitude']], zoom_start=8, tiles='CartoDB positron')
-
+    # m = folium.Map(location=[station_db.loc[first_sta, 'latitude'], station_db.loc[first_sta, 'longitude']], zoom_start=8, tiles='CartoDB positron')
+    m = folium.Map(location=[station_db.loc[first_sta, 'latitude'], station_db.loc[first_sta, 'longitude']], zoom_start=8, tiles='OpenStreetMap')
+    
     # if heatmap_data:
     #     HeatMap(heatmap_data, radius=20, blur=15, min_opacity=0.2, gradient={0.4: 'blue', 0.65: 'lime', 1: 'red'}).add_to(m)
 
